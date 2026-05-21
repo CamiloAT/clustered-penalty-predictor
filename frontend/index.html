@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penalty Analytics Predictor</title>
+    <meta name="description" content="Predicción y análisis probabilístico de penales usando Machine Learning.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                    <path d="M2 12h20"></path>
+                </svg>
+                <h1>Penalty Analytics</h1>
+            </div>
+            <p class="subtitle">Análisis Probabilístico e Inteligencia Artificial en el Punto Penal</p>
+        </header>
+
+        <main>
+            <div class="glass-card prediction-form">
+                <h2>Configurar Situación Hipotética</h2>
+                <form id="penaltyForm">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="zone">Zona del Arco (1-9)</label>
+                            <select id="zone" name="zone" required>
+                                <option value="" disabled selected>Seleccione zona</option>
+                                <option value="1">1 - Arriba Izquierda</option>
+                                <option value="2">2 - Arriba Centro</option>
+                                <option value="3">3 - Arriba Derecha</option>
+                                <option value="4">4 - Medio Izquierda</option>
+                                <option value="5">5 - Medio Centro</option>
+                                <option value="6">6 - Medio Derecha</option>
+                                <option value="7">7 - Abajo Izquierda</option>
+                                <option value="8">8 - Abajo Centro</option>
+                                <option value="9">9 - Abajo Derecha</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="foot">Pie del Cobrador</label>
+                            <select id="foot" name="foot" required>
+                                <option value="" disabled selected>Seleccione pie</option>
+                                <option value="R">Derecho (R)</option>
+                                <option value="L">Izquierdo (L)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="keeper">Movimiento Portero</label>
+                            <select id="keeper" name="keeper" required>
+                                <option value="" disabled selected>Seleccione dirección</option>
+                                <option value="L">Izquierda (L)</option>
+                                <option value="C">Centro (C)</option>
+                                <option value="R">Derecha (R)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="match_pressure">Presión (Eliminatoria)</label>
+                            <select id="match_pressure" name="match_pressure" required>
+                                <option value="0">Fase de Grupos (Baja)</option>
+                                <option value="1">Eliminatoria (Alta)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="predict-btn">
+                        <span>Generar Predicción</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <div class="glass-card result-panel hidden" id="resultPanel">
+                <div class="loading hidden" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Analizando probabilidades y clústers...</p>
+                </div>
+                
+                <div class="prediction-results hidden" id="predictionContent">
+                    <h3>Resultado Predicho</h3>
+                    <div class="probability-circle">
+                        <svg viewBox="0 0 36 36" class="circular-chart green">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" id="probPath" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <text x="18" y="20.35" class="percentage" id="probText">0%</text>
+                        </svg>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-label">Predicción</span>
+                            <span class="stat-value" id="outcomeText">GOL</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Clúster Asignado</span>
+                            <span class="stat-value" id="clusterText">2</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Perfil</span>
+                            <span class="stat-value" id="profileText">Tiro Seguro y Potente</span>
+                        </div>
+                    </div>
+                    
+                    <button class="reset-btn" id="resetBtn">Nueva Simulación</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

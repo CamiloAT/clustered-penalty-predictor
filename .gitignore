@@ -1,0 +1,20 @@
+# Entornos virtuales
+venv/
+env/
+.env
+
+# Artefactos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Modelos y datos pesados (opcional, dependiendo de si se suben a Git o no)
+# models/*.pkl
+# data/*.csv
+
+# Frontend dependencias (si aplica)
+node_modules/
+
+# IDEs
+.idea/
+.vscode/
