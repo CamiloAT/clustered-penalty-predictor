@@ -4,6 +4,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingState = document.getElementById('loadingState');
     const predictionContent = document.getElementById('predictionContent');
     const resetBtn = document.getElementById('resetBtn');
+    
+    // Modal Logic
+    const metricsModal = document.getElementById('metricsModal');
+    const showMetricsBtn = document.getElementById('showMetricsBtn');
+    const closeMetricsBtn = document.getElementById('closeMetricsBtn');
+
+    if (showMetricsBtn && metricsModal && closeMetricsBtn) {
+        showMetricsBtn.addEventListener('click', () => {
+            metricsModal.classList.remove('hidden');
+        });
+        closeMetricsBtn.addEventListener('click', () => {
+            metricsModal.classList.add('hidden');
+        });
+        metricsModal.addEventListener('click', (e) => {
+            if (e.target === metricsModal) {
+                metricsModal.classList.add('hidden');
+            }
+        });
+    }
 
     // Visual Goal Net Logic
     const zones = document.querySelectorAll('.goal-zone');
@@ -110,6 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 animContent.classList.add('anim-miss');
                 animText.textContent = data.predicted_outcome === 'Atajada' ? '¡ATAJADA!' : '¡FALLÓ!';
             }
+            
+            // Ocultar overlay a pantalla completa de la animación luego de completada
+            setTimeout(() => {
+                animContainer.classList.add("hidden");
+            }, 2500);
         }
 
         probText.textContent = `${probability}%`;

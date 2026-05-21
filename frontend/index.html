@@ -184,14 +184,6 @@
                             <text x="18" y="20.35" class="percentage" id="probText">0%</text>
                         </svg>
                     </div>
-
-                    <!-- Animation Container -->
-                    <div id="animationContainer" class="hidden">
-                        <div class="anim-content" id="animContent">
-                            <div class="anim-ball">⚽</div>
-                            <div class="anim-text" id="animText">GOL</div>
-                        </div>
-                    </div>
                     
                     <div class="stats-grid">
                         <div class="stat-box">
@@ -220,10 +212,35 @@
                         </div>
                     </div>
                     
-                    <button class="reset-btn" id="resetBtn">Nueva Simulación</button>
+                    <div style="display: flex; gap: 1rem; width: 100%;">
+                        <button class="reset-btn" id="showMetricsBtn" style="background: rgba(255, 255, 255, 0.1); flex: 1;">Ver Métricas</button>
+                        <button class="reset-btn" id="resetBtn" style="flex: 1;">Nueva Simulación</button>
+                    </div>
                 </div>
             </div>
+
         </main>
+    </div>
+
+    <!-- Modal de Métricas -->
+    <div id="metricsModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="close-modal" id="closeMetricsBtn">&times;</button>
+            <h3>Métricas de Evaluación del Modelo</h3>
+            <p style="color: #a0a5b0; margin-bottom: 1rem; font-size: 0.9rem;">(Se actualizan tras correr fase 4 de entrenamiento)</p>
+            <div class="plots-grid">
+                <img src="http://127.0.0.1:8000/plots/confusion_matrix.png" alt="Matriz de Confusión" onerror="this.style.display='none'">
+                <img src="http://127.0.0.1:8000/plots/elbow_method.png" alt="Método del Codo" onerror="this.style.display='none'">
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor general para animaciones -->
+    <div id="animationContainer" class="hidden">
+        <div id="animContent" class="anim-content">
+            <div class="anim-ball">⚽</div>
+            <div class="anim-text" id="animText"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>

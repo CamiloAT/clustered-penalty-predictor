@@ -42,18 +42,84 @@ A modern, interactive, and complete Machine Learning pipeline for predicting soc
 
 ## Execution and Development
 
-1. **Install required dependencies:**
-   Make sure you have Python installed, then run the following command in the project root:
+1. **Create and Activate a Virtual Environment:**
+   Run the following commands in the project root to isolate dependencies:
+   ```bash
+   python -m venv venv
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   # source venv/bin/activate
+   ```
+
+2. **Install required dependencies:**
+   With the virtual environment activated, run:
    ```bash
    pip install -r requirements.txt
    ```
-2. **Run the API (Backend) in development mode:**
+
+3. **Run the API (Backend) in development mode:**
    Launch the FastAPI server that loads the trained `.pkl` models:
    ```bash
    uvicorn api.main:app --reload
    ```
-3. **Open the Interface (Frontend):**
+
+4. **Open the Interface (Frontend):**
    Simply open the `frontend/index.html` file in your preferred web browser.
+
+---
+
+## Project Structure
+
+```
+C:.
+|   .gitignore
+|   project.md
+|   README.md
+|   requirements.txt
+|
++---api
+|       main.py
+|       schemas.py
+|       __init__.py
+|
++---data
+|       WorldCupShootouts.csv
+|
++---frontend
+|       bg.png
+|       index.html
+|       script.js
+|       styles.css
+|
++---models
+|       classifier_model.pkl
+|       kmeans_model.pkl
+|       preprocessor.pkl
+|
++---outputs
+|   +---eda_plots
+|   +---evaluation_plots
+|   |       confusion_matrix.png
+|   |       elbow_method.png
+|   |
+|   \---reports
++---pipelines
+|       phase_1_eda.py
+|       phase_2_preprocessing.py
+|       phase_3_clustering.py
+|       phase_4_training.py
+|       phase_5_evaluation.py
+|
+\---src
+        classifier.py
+        clustering.py
+        data_loader.py
+        evaluator.py
+        predictor.py
+        preprocessor.py
+        __init__.py
+```
 
 > [!NOTE]
 > This project adheres to the CRISP-DM methodology, structurally separating data processing, modeling pipelines, the API exposure, and the frontend visualization.
