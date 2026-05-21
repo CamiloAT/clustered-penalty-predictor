@@ -90,6 +90,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if(timeText) timeText.textContent = data.time_taken.toFixed(2) + "s";
 
         const chart = document.querySelector('.circular-chart');
+        
+        // Animation Logic
+        const animContainer = document.getElementById('animationContainer');
+        const animContent = document.getElementById('animContent');
+        const animText = document.getElementById('animText');
+        
+        if (animContainer) {
+            animContainer.classList.remove('hidden');
+            animContent.className = 'anim-content'; // Reset classes
+            
+            // Force a reflow to restart animation
+            void animContent.offsetWidth; 
+            
+            if (isGoal) {
+                animContent.classList.add('anim-goal');
+                animText.textContent = '¡GOLAZO!';
+            } else {
+                animContent.classList.add('anim-miss');
+                animText.textContent = data.predicted_outcome === 'Atajada' ? '¡ATAJADA!' : '¡FALLÓ!';
+            }
+        }
 
         probText.textContent = `${probability}%`;
         setTimeout(() => {
