@@ -32,6 +32,10 @@
                 <form id="penaltyForm">
                     <div class="form-grid">
                         <div class="input-group">
+                            <label for="team">Equipo (Ej. ARG, FRA)</label>
+                            <input type="text" id="team" name="team" required placeholder="ARG" style="appearance: none; background-color: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.8rem 1rem; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; transition: all 0.3s ease; text-transform: uppercase;">
+                        </div>
+                        <div class="input-group">
                             <label for="zone">Zona del Arco (1-9)</label>
                             <select id="zone" name="zone" required>
                                 <option value="" disabled selected>Seleccione zona</option>
@@ -62,6 +66,10 @@
                                 <option value="C">Centro (C)</option>
                                 <option value="R">Derecha (R)</option>
                             </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="penalty_number">Turno de Penal</label>
+                            <input type="number" id="penalty_number" name="penalty_number" min="1" max="22" required value="1" style="appearance: none; background-color: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.8rem 1rem; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; transition: all 0.3s ease;">
                         </div>
                         <div class="input-group">
                             <label for="match_pressure">Presión (Eliminatoria)</label>

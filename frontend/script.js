@@ -5,22 +5,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const predictionContent = document.getElementById('predictionContent');
     const resetBtn = document.getElementById('resetBtn');
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Mostrar panel de resultados en estado de carga
         resultPanel.classList.remove('hidden');
         loadingState.classList.remove('hidden');
         predictionContent.classList.add('hidden');
 
-        // TODO: Aquí se hará la llamada al API REST de FastAPI
-        // const formData = new FormData(form);
-        // fetch('/predict', { method: 'POST', body: formData })...
+        const formData = new FormData(form);
+        const payload = {
+            team: formData.get('team'),
+            zone: parseInt(formData.get('zone')),
+            foot: formData.get('foot'),
+            keeper: formData.get('keeper'),
+            penalty_number: parseInt(formData.get('penalty_number')),
+            match_pressure: parseInt(formData.get('match_pressure'))
+        };
 
-        // Simulación temporal (Mock API)
-        setTimeout(() => {
-            simulatePrediction();
-        }, 1500);
+        try {
+            const response = await fetch('http://127.0.0.1:8000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) throw new Error("Error en la API. Asegúrate de tener FastAPI corriendo con uvicorn.");
+            
+            const data = await response.json();
+            displayPrediction(data);
+        } catch (error) {
+            alert(error.message);
+            loadingState.classList.add('hidden');
+            resultPanel.classList.add('hidden');
+        }
     });
 
     resetBtn.addEventListener('click', () => {
@@ -28,23 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
     });
 
-    function simulatePrediction() {
+    function displayPrediction(data) {
         loadingState.classList.add('hidden');
         predictionContent.classList.remove('hidden');
 
-        // Valores aleatorios para la demo
-        const probability = Math.floor(Math.random() * 40) + 50; // 50-90%
-        const isGoal = probability > 65;
-        const cluster = Math.floor(Math.random() * 4) + 1; // 1-4
-        
-        const profiles = {
-            1: "Tiro Central Potente",
-            2: "Colocación a Esquina",
-            3: "Engaño al Portero",
-            4: "Riesgo Alto (Fuera/Palo)"
-        };
+        const probability = Math.round(data.probability_goal);
+        const isGoal = data.predicted_outcome === 'Gol';
+        const cluster = data.assigned_cluster;
+        const profile = data.cluster_profile;
 
-        // Actualizar UI
         const probText = document.getElementById('probText');
         const probPath = document.getElementById('probPath');
         const outcomeText = document.getElementById('outcomeText');
@@ -53,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const chart = document.querySelector('.circular-chart');
 
         probText.textContent = `${probability}%`;
-        // Dash array is "probability, 100"
         setTimeout(() => {
             probPath.setAttribute('stroke-dasharray', `${probability}, 100`);
         }, 100);
@@ -64,13 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
             chart.classList.add('green');
             chart.classList.remove('red');
         } else {
-            outcomeText.textContent = 'FALLO';
+            outcomeText.textContent = data.predicted_outcome.toUpperCase();
             outcomeText.className = 'stat-value fail';
             chart.classList.add('red');
             chart.classList.remove('green');
         }
 
         clusterText.textContent = `Clúster ${cluster}`;
-        profileText.textContent = profiles[cluster];
+        profileText.textContent = profile;
     }
 });
