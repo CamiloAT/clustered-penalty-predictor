@@ -71,5 +71,7 @@ async def predict_penalty(request: PenaltyPredictionRequest):
         probability_goal=max_prob,
         predicted_outcome=best_outcome,
         assigned_cluster=result["cluster_assigned"],
-        cluster_profile=f"Perfil {result['cluster_assigned']}"
+        cluster_profile=f"Perfil {result['cluster_assigned']}",
+        steps_run=result["steps_run"],
+        time_taken=result["time_taken"]
     )

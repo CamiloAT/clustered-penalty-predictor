@@ -23,6 +23,11 @@ class PenaltyPredictor:
             if col not in df.columns:
                 df[col] = val
                 
+        # 0. Obtener Datos Aumentados para mostrar en UI
+        augmented_df = self.preprocessor._augment_data(df)
+        steps_run = int(augmented_df['Steps_Run'].iloc[0])
+        time_taken = float(augmented_df['Time_Taken'].iloc[0])
+                
         # 1. Transformación (Aumentación y Feature Engineering)
         X = self.preprocessor.transform(df)
         
@@ -46,5 +51,7 @@ class PenaltyPredictor:
                 "Atajada": prob_atajada,
                 "Fallo": prob_fallo
             },
-            "cluster_assigned": int(cluster)
+            "cluster_assigned": int(cluster),
+            "steps_run": steps_run,
+            "time_taken": time_taken
         }

@@ -5,9 +5,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const predictionContent = document.getElementById('predictionContent');
     const resetBtn = document.getElementById('resetBtn');
 
+    // Visual Goal Net Logic
+    const zones = document.querySelectorAll('.goal-zone');
+    const zoneInput = document.getElementById('zone');
+
+    zones.forEach(zone => {
+        zone.addEventListener('click', () => {
+            zones.forEach(z => z.classList.remove('selected'));
+            zone.classList.add('selected');
+            zoneInput.value = zone.dataset.zone;
+        });
+    });
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        const zoneError = document.getElementById('zoneError');
+        const zoneValue = document.getElementById('zone').value;
+        if (!zoneValue) {
+            zoneError.classList.remove('hidden');
+            return;
+        } else {
+            zoneError.classList.add('hidden');
+        }
+
         resultPanel.classList.remove('hidden');
         loadingState.classList.remove('hidden');
         predictionContent.classList.add('hidden');
@@ -15,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(form);
         const payload = {
             team: formData.get('team'),
-            zone: parseInt(formData.get('zone')),
+            zone: parseInt(zoneValue),
             foot: formData.get('foot'),
             keeper: formData.get('keeper'),
             penalty_number: parseInt(formData.get('penalty_number')),
@@ -61,6 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const outcomeText = document.getElementById('outcomeText');
         const clusterText = document.getElementById('clusterText');
         const profileText = document.getElementById('profileText');
+        
+        // Data augmentation stats
+        const stepsText = document.getElementById('stepsText');
+        const timeText = document.getElementById('timeText');
+        if(stepsText) stepsText.textContent = data.steps_run;
+        if(timeText) timeText.textContent = data.time_taken.toFixed(2) + "s";
+
         const chart = document.querySelector('.circular-chart');
 
         probText.textContent = `${probability}%`;

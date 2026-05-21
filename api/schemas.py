@@ -13,3 +13,5 @@ class PenaltyPredictionResponse(BaseModel):
     predicted_outcome: str
     assigned_cluster: int
     cluster_profile: str
+    steps_run: int
+    time_taken: float

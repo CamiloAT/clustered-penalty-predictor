@@ -31,23 +31,103 @@
                 <h2>Configurar Situación Hipotética</h2>
                 <form id="penaltyForm">
                     <div class="form-grid">
-                        <div class="input-group">
-                            <label for="team">Equipo (Ej. ARG, FRA)</label>
-                            <input type="text" id="team" name="team" required placeholder="ARG" style="appearance: none; background-color: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.8rem 1rem; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; transition: all 0.3s ease; text-transform: uppercase;">
+                        <div class="input-group" style="grid-column: 1 / -1; text-align: center;">
+                            <label>Zona del Arco (Selecciona una visualmente)</label>
+                            <div class="pitch-container">
+                                <div class="goal-net" id="goalNet">
+                                    <div class="goal-zone" data-zone="1">1</div>
+                                    <div class="goal-zone" data-zone="2">2</div>
+                                    <div class="goal-zone" data-zone="3">3</div>
+                                    <div class="goal-zone" data-zone="4">4</div>
+                                    <div class="goal-zone" data-zone="5">5</div>
+                                    <div class="goal-zone" data-zone="6">6</div>
+                                    <div class="goal-zone" data-zone="7">7</div>
+                                    <div class="goal-zone" data-zone="8">8</div>
+                                    <div class="goal-zone" data-zone="9">9</div>
+                                </div>
+                                <div class="penalty-box">
+                                    <div class="penalty-spot"></div>
+                                    <div class="penalty-arc"></div>
+                                </div>
+                            </div>
+                            <div id="zoneError" class="error-msg hidden">¡Por favor, haz clic en la Zona del Arco (1-9) donde irá dirigido el cobro!</div>
+                            <input type="hidden" id="zone" name="zone" required>
                         </div>
                         <div class="input-group">
-                            <label for="zone">Zona del Arco (1-9)</label>
-                            <select id="zone" name="zone" required>
-                                <option value="" disabled selected>Seleccione zona</option>
-                                <option value="1">1 - Arriba Izquierda</option>
-                                <option value="2">2 - Arriba Centro</option>
-                                <option value="3">3 - Arriba Derecha</option>
-                                <option value="4">4 - Medio Izquierda</option>
-                                <option value="5">5 - Medio Centro</option>
-                                <option value="6">6 - Medio Derecha</option>
-                                <option value="7">7 - Abajo Izquierda</option>
-                                <option value="8">8 - Abajo Centro</option>
-                                <option value="9">9 - Abajo Derecha</option>
+                            <label for="team">Equipo (Mundial 2026)</label>
+                            <select id="team" name="team" required>
+                                <option value="" disabled selected>Seleccione equipo</option>
+                                <optgroup label="Grupo A">
+                                    <option value="MEX">MEX (México)</option>
+                                    <option value="RSA">RSA (Sudáfrica)</option>
+                                    <option value="KOR">KOR (Corea del Sur)</option>
+                                    <option value="CZE">CZE (República Checa)</option>
+                                </optgroup>
+                                <optgroup label="Grupo B">
+                                    <option value="CAN">CAN (Canadá)</option>
+                                    <option value="BIH">BIH (Bosnia y Herzegovina)</option>
+                                    <option value="QAT">QAT (Catar)</option>
+                                    <option value="SUI">SUI (Suiza)</option>
+                                </optgroup>
+                                <optgroup label="Grupo C">
+                                    <option value="BRA">BRA (Brasil)</option>
+                                    <option value="MAR">MAR (Marruecos)</option>
+                                    <option value="HAI">HAI (Haití)</option>
+                                    <option value="SCO">SCO (Escocia)</option>
+                                </optgroup>
+                                <optgroup label="Grupo D">
+                                    <option value="USA">USA (Estados Unidos)</option>
+                                    <option value="PAR">PAR (Paraguay)</option>
+                                    <option value="AUS">AUS (Australia)</option>
+                                    <option value="TUR">TUR (Turquía)</option>
+                                </optgroup>
+                                <optgroup label="Grupo E">
+                                    <option value="GER">GER (Alemania)</option>
+                                    <option value="CUW">CUW (Curazao)</option>
+                                    <option value="CIV">CIV (Costa de Marfil)</option>
+                                    <option value="ECU">ECU (Ecuador)</option>
+                                </optgroup>
+                                <optgroup label="Grupo F">
+                                    <option value="NED">NED (Países Bajos)</option>
+                                    <option value="JPN">JPN (Japón)</option>
+                                    <option value="TUN">TUN (Túnez)</option>
+                                    <option value="SWE">SWE (Suecia)</option>
+                                </optgroup>
+                                <optgroup label="Grupo G">
+                                    <option value="BEL">BEL (Bélgica)</option>
+                                    <option value="EGY">EGY (Egipto)</option>
+                                    <option value="IRN">IRN (Irán)</option>
+                                    <option value="NZL">NZL (Nueva Zelanda)</option>
+                                </optgroup>
+                                <optgroup label="Grupo H">
+                                    <option value="ESP">ESP (España)</option>
+                                    <option value="CPV">CPV (Cabo Verde)</option>
+                                    <option value="KSA">KSA (Arabia Saudita)</option>
+                                    <option value="URU">URU (Uruguay)</option>
+                                </optgroup>
+                                <optgroup label="Grupo I">
+                                    <option value="FRA">FRA (Francia)</option>
+                                    <option value="SEN">SEN (Senegal)</option>
+                                    <option value="NOR">NOR (Noruega)</option>
+                                    <option value="IRQ">IRQ (Irak)</option>
+                                </optgroup>
+                                <optgroup label="Grupo J">
+                                    <option value="ARG">ARG (Argentina)</option>
+                                    <option value="ALG">ALG (Argelia)</option>
+                                    <option value="AUT">AUT (Austria)</option>
+                                    <option value="JOR">JOR (Jordania)</option>
+                                </optgroup>
+                                <optgroup label="Grupo K">
+                                    <option value="POR">POR (Portugal)</option>
+                                    <option value="COD">COD (R.D. del Congo)</option>
+                                    <option value="UZB">UZB (Uzbekistán)</option>
+                                    <option value="COL">COL (Colombia)</option>
+                                </optgroup>
+                                <optgroup label="Grupo L">
+                                    <option value="ENG">ENG (Inglaterra)</option>
+                                    <option value="CRO">CRO (Croacia)</option>
+                                    <option value="PAN">PAN (Panamá)</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="input-group">
@@ -117,6 +197,18 @@
                         <div class="stat-box">
                             <span class="stat-label">Perfil</span>
                             <span class="stat-value" id="profileText">Tiro Seguro y Potente</span>
+                        </div>
+                    </div>
+
+                    <!-- Datos Aumentados (Simulados) -->
+                    <div class="stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
+                        <div class="stat-box">
+                            <span class="stat-label">Pasos de Carrera (IA)</span>
+                            <span class="stat-value" id="stepsText">0</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Tiempo Transcurrido (IA)</span>
+                            <span class="stat-value" id="timeText">0.00s</span>
                         </div>
                     </div>
                     
