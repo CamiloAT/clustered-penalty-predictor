@@ -1,4 +1,15 @@
+// Configuración de API dinámico
+const API_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
+    ? 'http://127.0.0.1:8000' 
+    : 'https://penalty-backend.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Configurar rutas de imágenes dinámicamente
+    const confMatrixImg = document.getElementById('confMatrixImg');
+    const elbowImg = document.getElementById('elbowImg');
+    if (confMatrixImg) confMatrixImg.src = `${API_URL}/plots/confusion_matrix.png`;
+    if (elbowImg) elbowImg.src = `${API_URL}/plots/elbow_method.png`;
+
     const form = document.getElementById('penaltyForm');
     const resultPanel = document.getElementById('resultPanel');
     const loadingState = document.getElementById('loadingState');
@@ -151,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/predict', {
+            const response = await fetch(`${API_URL}/predict`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
