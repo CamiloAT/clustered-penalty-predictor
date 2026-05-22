@@ -98,12 +98,9 @@ C:.
 |       preprocessor.pkl
 |
 +---outputs
-|   +---eda_plots
-|   +---evaluation_plots
-|   |       confusion_matrix.png
-|   |       elbow_method.png
-|   |
-|   \---reports
+|   \---evaluation_plots
+|           confusion_matrix.png
+|           elbow_method.png
 +---pipelines
 |       phase_1_eda.py
 |       phase_2_preprocessing.py

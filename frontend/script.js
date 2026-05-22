@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingState = document.getElementById('loadingState');
     const predictionContent = document.getElementById('predictionContent');
     const resetBtn = document.getElementById('resetBtn');
-    
+
     // Modal Logic
     const metricsModal = document.getElementById('metricsModal');
     const showMetricsBtn = document.getElementById('showMetricsBtn');
@@ -24,29 +24,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Visual Goal Net Logic
-    const zones = document.querySelectorAll('.goal-zone');
-    const zoneInput = document.getElementById('zone');
+    // ===== ZONE SELECTORS =====
+    const KEEPER_MAP = { 1: 'L', 2: 'C', 3: 'R', 4: 'L', 5: 'C', 6: 'R', 7: 'L', 8: 'C', 9: 'R' };
 
-    zones.forEach(zone => {
-        zone.addEventListener('click', () => {
-            zones.forEach(z => z.classList.remove('selected'));
-            zone.classList.add('selected');
-            zoneInput.value = zone.dataset.zone;
+    function setupZoneSelector(netId, inputId, indicatorId, keeperMode) {
+        const zones = document.querySelectorAll(`#${netId} .goal-zone`);
+        const input = document.getElementById(inputId);
+        const indicator = document.getElementById(indicatorId);
+
+        zones.forEach(zone => {
+            zone.addEventListener('click', () => {
+                zones.forEach(z => z.classList.remove('selected'));
+                zone.classList.add('selected');
+                input.value = zone.dataset.zone;
+                indicator.textContent = `Zona ${zone.dataset.zone} seleccionada`;
+                indicator.classList.add('has-selection');
+
+                if (keeperMode) {
+                    document.getElementById('keeper').value = KEEPER_MAP[zone.dataset.zone];
+                }
+
+                document.getElementById(keeperMode ? 'keeperError' : 'zoneError').classList.add('hidden');
+            });
         });
-    });
+    }
 
+    setupZoneSelector('goalNetKeeper', 'zone_keeper', 'keeperZoneIndicator', true);
+    setupZoneSelector('goalNetKicker', 'zone', 'kickerZoneIndicator', false);
+
+    // ===== FORM SUBMIT =====
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        const zoneError = document.getElementById('zoneError');
-        const zoneValue = document.getElementById('zone').value;
-        if (!zoneValue) {
-            zoneError.classList.remove('hidden');
-            return;
+
+        const keeperZone = document.getElementById('zone_keeper').value;
+        const kickerZone = document.getElementById('zone').value;
+        let hasError = false;
+
+        if (!keeperZone) {
+            document.getElementById('keeperError').classList.remove('hidden');
+            hasError = true;
         } else {
-            zoneError.classList.add('hidden');
+            document.getElementById('keeperError').classList.add('hidden');
         }
+
+        if (!kickerZone) {
+            document.getElementById('zoneError').classList.remove('hidden');
+            hasError = true;
+        } else {
+            document.getElementById('zoneError').classList.add('hidden');
+        }
+
+        if (hasError) return;
 
         resultPanel.classList.remove('hidden');
         loadingState.classList.remove('hidden');
@@ -55,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(form);
         const payload = {
             team: formData.get('team'),
-            zone: parseInt(zoneValue),
+            zone: parseInt(kickerZone),
             foot: formData.get('foot'),
             keeper: formData.get('keeper'),
             penalty_number: parseInt(formData.get('penalty_number')),
@@ -70,9 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(payload)
             });
-            
+
             if (!response.ok) throw new Error("Error en la API. Asegúrate de tener FastAPI corriendo con uvicorn.");
-            
+
             const data = await response.json();
             displayPrediction(data);
         } catch (error) {
@@ -85,6 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
     resetBtn.addEventListener('click', () => {
         resultPanel.classList.add('hidden');
         form.reset();
+        document.querySelectorAll('.goal-zone.selected').forEach(z => z.classList.remove('selected'));
+        document.querySelectorAll('.zone-indicator').forEach(el => {
+            el.textContent = 'Selecciona una zona';
+            el.classList.remove('has-selection');
+        });
     });
 
     function displayPrediction(data) {
@@ -101,27 +134,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const outcomeText = document.getElementById('outcomeText');
         const clusterText = document.getElementById('clusterText');
         const profileText = document.getElementById('profileText');
-        
-        // Data augmentation stats
+
         const stepsText = document.getElementById('stepsText');
         const timeText = document.getElementById('timeText');
         if(stepsText) stepsText.textContent = data.steps_run;
         if(timeText) timeText.textContent = data.time_taken.toFixed(2) + "s";
 
         const chart = document.querySelector('.circular-chart');
-        
-        // Animation Logic
+
         const animContainer = document.getElementById('animationContainer');
         const animContent = document.getElementById('animContent');
         const animText = document.getElementById('animText');
-        
+
         if (animContainer) {
             animContainer.classList.remove('hidden');
-            animContent.className = 'anim-content'; // Reset classes
-            
-            // Force a reflow to restart animation
-            void animContent.offsetWidth; 
-            
+            animContent.className = 'anim-content';
+            void animContent.offsetWidth;
+
             if (isGoal) {
                 animContent.classList.add('anim-goal');
                 animText.textContent = '¡GOLAZO!';
@@ -129,8 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 animContent.classList.add('anim-miss');
                 animText.textContent = data.predicted_outcome === 'Atajada' ? '¡ATAJADA!' : '¡FALLÓ!';
             }
-            
-            // Ocultar overlay a pantalla completa de la animación luego de completada
+
             setTimeout(() => {
                 animContainer.classList.add("hidden");
             }, 2500);

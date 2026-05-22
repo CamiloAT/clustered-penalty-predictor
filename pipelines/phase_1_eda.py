@@ -18,4 +18,4 @@ def run_eda(data_path: str, output_dir: str):
     print(f"Gráficos guardados en {output_dir}")
 
 if __name__ == "__main__":
-    run_eda("../data/WorldCupShootouts.csv", "../outputs/eda_plots")
+    run_eda("../data/WorldCupShootouts.csv", "../outputs/evaluation_plots")

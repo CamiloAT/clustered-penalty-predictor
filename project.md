@@ -32,8 +32,10 @@
    - Fase 3 – Preparación de los datos..............................................................................................
    - Fase 4 – Modelado no supervisado............................................................................................
    - Fase 5 – Modelado supervisado.................................................................................................
-   - Fase 6 – Evaluación...................................................................................................................
-   - Fase 7 – Documentación y socialización...................................................................................
+    - Fase 6 – Evaluación...................................................................................................................
+    - Fase 7 – Despliegue de API REST..........................................................................................
+    - Fase 8 – Desarrollo del Frontend Web.....................................................................................
+    - Fase 9 – Documentación y socialización...................................................................................
 - 7. Planteamiento inicial del software............................................................................................
    - Requerimientos funcionales.......................................................................................................
 - 8. Técnicas de Machine Learning propuestas.............................................................................
@@ -43,10 +45,12 @@
    - No supervisado – Agrupamiento (Clustering)...........................................................................
       - Variables de entrada para clustering....................................................................................
 - 9. Arquitectura propuesta.............................................................................................................
-   - Capa 1 – Ingesta y preprocesamiento........................................................................................
-   - Capa 2 – Modelado dual (Pipeline ML)....................................................................................
-   - Capa 3 – Evaluación y predicción.............................................................................................
-   - Tecnologías................................................................................................................................
+    - Capa 1 – Ingesta y preprocesamiento........................................................................................
+    - Capa 2 – Modelado dual (Pipeline ML)....................................................................................
+    - Capa 3 – Evaluación y predicción.............................................................................................
+    - Capa 4 – API REST (FastAPI).................................................................................................
+    - Capa 5 – Frontend Web...........................................................................................................
+    - Tecnologías................................................................................................................................
 - 10. Cronograma............................................................................................................................
 - Referencias....................................................................................................................................
 
@@ -109,7 +113,7 @@ características de atajada del portero, contexto temporal del partido, factor d
 del torneo y el marcador), ¿es posible entrenar un modelo computacional que prediga con alta
 precisión si el penal terminará en gol, fallo o atajada?. La resolución empírica de esta pregunta se
 plantea a través de una tarea de clasificación multiclase, lo que permite la aplicación y
-evaluación de algoritmos avanzados de ensamble, tales como Random Forest o XGBoost, o
+evaluación de algoritmos de ensamble, tales como Random Forest, o
 modelos base como la Regresión Logística (Géron, 2022). Estos modelos tienen la capacidad
 matemática de encontrar relaciones ocultas, descubriendo dinámicas no lineales complejas de los
 deportistas bajo presión.
@@ -194,7 +198,9 @@ distribución, correlaciones y valores atípicos.
 
 ### Fase 3 – Preparación de los datos..............................................................................................
 
-Limpieza del dataset (manejo de valores nulos, duplicados y datos atípicos). Codificación de variables
+Imputación de valores nulos en variables contextuales, aumento de datos sintéticos (Steps_Run,
+Time_Taken) basado en reglas de dominio, y cálculo de métricas derivadas (Stress_Index,
+Team_Effectiveness, Keeper_Save_Rate). Codificación de variables
 categóricas mediante one-hot encoding. Normalización y estandarización de variables numéricas.
 División en conjuntos de entrenamiento (70%), validación (15%) y prueba (15%), garantizando que no
 haya fuga de datos (data leakage) entre particiones (Géron, 2022).
@@ -207,7 +213,7 @@ dataset.
 
 ### Fase 5 – Modelado supervisado.................................................................................................
 
-Incorporación del clúster como feature adicional. Entrenamiento de Random Forest y/o XGBoost. Ajuste
+Incorporación del clúster como feature adicional. Entrenamiento de Random Forest. Ajuste
 de hiperparámetros mediante validación cruzada (k-fold). Análisis de la importancia de variables (feature
 importance).
 
@@ -216,7 +222,19 @@ importance).
 Análisis de métricas, matrices de confusión, curvas ROC y detección de sobreajuste (Hastie et al., 2020).
 Comparación de modelos y selección del mejor desempeño.
 
-### Fase 7 – Documentación y socialización...................................................................................
+### Fase 7 – Despliegue de API REST.............................................................................................
+
+Construcción de una API REST con FastAPI para servir los modelos entrenados. Definición de esquemas
+de entrada/salida con Pydantic, carga de artefactos (preprocessor, clustering, classifier) y endpoint `/predict`
+con CORS habilitado para consumo desde el frontend.
+
+### Fase 8 – Desarrollo del Frontend Web.........................................................................................
+
+Creación de una interfaz web interactiva con HTML, CSS y JavaScript vanilla. Incluye canvas con
+representación visual del arco dividido en 9 zonas, formulario de entrada de datos contextuales del penal,
+visualización de resultados con barras de probabilidad y tarjeta del perfil de clúster asignado.
+
+### Fase 9 – Documentación y socialización...................................................................................
 
 Elaboración del documento final, código documentado y presentación de resultados conforme a los
 requisitos del Proyecto Final
@@ -229,11 +247,22 @@ requisitos del Proyecto Final
 ```
 ● RF-01: El sistema debe permitir la carga de un dataset en formato CSV con datos históricos de
 penales.
-● RF-02: El sistema debe realizar automáticamente el proceso de limpieza y preprocesamiento de
-datos (nulos, duplicados, atípicos).
+● RF-02: El sistema debe realizar el preprocesamiento de los datos históricos de penales,
+incluyendo imputación de valores nulos en variables contextuales, aumento de datos sintéticos
+(Steps_Run, Time_Taken) basado en reglas de dominio futbolístico, y cálculo de métricas
+derivadas (Stress_Index, Team_Effectiveness, Keeper_Save_Rate) para alimentar los modelos.
+
+  *Nota justificativa:* No se implementa eliminación de duplicados ni detección de atípicos por
+  las siguientes razones: (1) Steps_Run y Time_Taken son generados sintéticamente con
+  np.random en `_augment_data`, no son mediciones reales — no tiene sentido sanitizar datos
+  artificiales. (2) Stress_Index es una transformación lineal determinista de Penalty_Number ×
+  (Elimination + 1) — matemáticamente no puede producir outliers. (3) Team_Effectiveness y
+  Keeper_Save_Rate son promedios históricos acotados entre 0 y 1. (4) El dataset proviene de
+  una fuente curada (World Cup shootouts), no de sensor data ruidosa, y su tamaño reducido
+  hace que cada registro sea valioso para el entrenamiento.
 ● RF-03: El sistema debe ejecutar el modelo K-Means para agrupar a los cobradores y asignar un
 perfil de clúster a cada registro.
-● RF-04: El sistema debe entrenar el modelo supervisado (Random Forest o XGBoost) integrando
+● RF-04: El sistema debe entrenar el modelo supervisado (Random Forest) integrando
 el perfil de clúster como variable de entrada.
 ● RF-05: El sistema debe permitir ingresar los datos de una situación hipotética de penal y retornar
 la probabilidad predicha de cada resultado (gol / fallo / atajada).
@@ -241,13 +270,20 @@ la probabilidad predicha de cada resultado (gol / fallo / atajada).
 (accuracy, F1-score, índice de silueta, matriz de confusión).
 ● RF-07: El código debe estar estructurado en módulos independientes y ser completamente
 reproducible sin rutas fijas ni dependencias no especificadas.
+● RF-08: El sistema debe exponer una API REST (FastAPI) con un endpoint `/predict` que reciba los
+datos contextuales del penal y retorne probabilidades, clúster asignado y métricas aumentadas.
+● RF-09: La API debe incluir configuración CORS para permitir peticiones desde el frontend web.
+● RF-10: El sistema debe incluir una interfaz web interactiva con un canvas que represente el arco
+dividido en 9 zonas, formulario de entrada y visualización de resultados con barras de probabilidad.
+● RF-11: El frontend debe mostrar el perfil de clúster asignado, el número de pasos de carrera y el
+tiempo estimado de ejecución junto con la predicción del resultado.
 ```
 ## 8. Técnicas de Machine Learning propuestas.............................................................................
 
 ### Supervisado – Clasificación multiclase.....................................................................................
 
-Se utilizará clasificación multiclase para predecir el resultado del penal (gol, fallo o atajada). Los
-algoritmos candidatos son Random Forest y XGBoost, seleccionados por su robustez ante datos mixtos,
+Se utilizará clasificación multiclase para predecir el resultado del penal (gol, fallo o atajada). El
+algoritmo seleccionado es Random Forest, por su robustez ante datos mixtos,
 su capacidad para manejar la importancia de features y su buen desempeño en problemas de clasificación
 con datos deportivos (Chen & Guestrin, 2016; Breiman, 2001). Como baseline se empleará Regresión
 Logística.
@@ -264,7 +300,7 @@ Logística.
 ```
 #### Variable objetivo (target – Y)..............................................................................................
 
-Resultado del penal: Gol (0), Fallo (1), Atajada (2) — clasificación multiclase.
+Resultado del penal: Gol (0), Atajada (1), Fallo (2) — clasificación multiclase.
 
 
 ### No supervisado – Agrupamiento (Clustering)...........................................................................
@@ -302,10 +338,32 @@ pipeline integrado (Géron, 2022).
 Módulo evaluator.py que genera métricas, matrices de confusión y curvas ROC. Módulo predictor.py que
 recibe datos de una situación hipotética y retorna probabilidades predichas.
 
+### Capa 4 – API REST (FastAPI)...................................................................................................
+
+Módulo api/main.py que define los endpoints de la API. Utiliza el predictor.py para realizar la inferencia
+completa (preprocesamiento → clustering → clasificación). Los esquemas de entrada/salida se definen
+con Pydantic en api/schemas.py. Configuración CORS para permitir peticiones desde cualquier origen.
+Los artefactos del pipeline (preprocessor.pkl, kmeans_model.pkl, classifier_model.pkl) se cargan en el
+evento de startup desde la carpeta models/. El endpoint POST /predict recibe los datos contextuales del
+penal y retorna las probabilidades, el clúster asignado y las métricas aumentadas.
+
+### Capa 5 – Frontend Web.............................................................................................................
+
+Interfaz de usuario en frontend/index.html con CSS y JavaScript vanilla. Incluye un canvas
+interactivo que representa el arco de fútbol dividido en 9 zonas numeradas, formulario con campos
+para equipo, pie del cobrador, movimiento del portero, número de penal y presión del partido. Los
+resultados se visualizan con barras de probabilidad para cada clase (Gol, Atajada, Fallo), el perfil de
+clúster asignado y métricas contextuales (pasos de carrera y tiempo de ejecución).
+
 ### Tecnologías................................................................................................................................
 
-Python 3.10+, scikit-learn, XGBoost, pandas, NumPy, matplotlib, seaborn. Entorno reproducible
-mediante requirements.txt o environment.yml. Se evitarán rutas fijas y valores codificados directamente
+**Backend**: Python 3.10+, scikit-learn, pandas, NumPy, matplotlib, seaborn, FastAPI, Uvicorn, Pydantic,
+joblib.
+
+**Frontend**: HTML5, CSS3, JavaScript vanilla (Canvas API).
+
+Infraestructura reproducible mediante requirements.txt. Los artefactos de los modelos se serializan con
+joblib y se almacenan en la carpeta models/. Se evitarán rutas fijas y valores codificados directamente
 en el código.
 
 
@@ -319,10 +377,10 @@ Elaboración y entrega de la propuesta (formato UPTC) Semana 10 Grupo
 Recopilación y documentación del dataset Semana 11 Grupo
 Análisis exploratorio de datos (EDA) y preprocesamiento Semana 11 Grupo
 Implementación del modelo no supervisado (K-Means) Semana 12 Grupo
-Implementación del modelo supervisado (Random Forest /
-XGBoost)
+Implementación del modelo supervisado (Random Forest)
 Semana 12-13 Grupo
 Evaluación de modelos y análisis crítico de resultados Semana 13 Grupo
+Despliegue de API REST (FastAPI) y Frontend Web Semana 13-14 Grupo
 Redacción del documento final y estructuración del código Semana 13-14 Grupo
 Entrega de documentación y entregables finales Semana 14 Grupo
 Preparación de diapositivas (máx. 6) para socialización Semana 14 Grupo

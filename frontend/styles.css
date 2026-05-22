@@ -619,3 +619,264 @@ select option {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ===== STEPPER ===== */
+.form-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.step.active .step-num {
+    background: var(--primary-color);
+    color: #0a0e17;
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.step-line {
+    width: 40px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 1px;
+}
+
+/* ===== SECTION LABELS ===== */
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.section-label h3 {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 1.15rem;
+    text-align: left;
+}
+
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.keeper-badge {
+    background: rgba(0, 149, 255, 0.2);
+    color: #4db8ff;
+    border: 1px solid rgba(0, 149, 255, 0.3);
+}
+
+.kicker-badge {
+    background: rgba(0, 210, 106, 0.2);
+    color: var(--primary-color);
+    border: 1px solid rgba(0, 210, 106, 0.3);
+}
+
+.section-desc {
+    color: #7a808d;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+/* ===== GOALKEEPER THEME ===== */
+.keeper-theme {
+    border-color: rgba(0, 149, 255, 0.4) !important;
+}
+
+.keeper-theme .goal-net {
+    border-color: #4db8ff;
+}
+
+.keeper-theme .goal-net .goal-zone:hover {
+    background: rgba(0, 149, 255, 0.2);
+    border-color: rgba(0, 149, 255, 0.5);
+}
+
+.keeper-theme .goal-net .goal-zone.selected {
+    background: rgba(0, 149, 255, 0.85);
+    border-color: #ffffff;
+    box-shadow: 0 0 20px rgba(0, 149, 255, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== KICKER THEME ===== */
+.kicker-theme {
+    border-color: rgba(0, 210, 106, 0.4) !important;
+}
+
+/* ===== KEEPER FIELD VIEW ===== */
+.keeper-field {
+    width: 100%;
+    height: 120px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.keeper-field-inner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, #0d6b3a 0%, #0f7a42 100%);
+    border: 3px solid rgba(255, 255, 255, 0.6);
+    border-top: none;
+    position: relative;
+}
+
+.keeper-field-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -200px;
+    right: -200px;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.keeper-field-pen-area {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 70px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.keeper-field-spot {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+}
+
+.keeper-field-kicker {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    opacity: 0.7;
+}
+
+.keeper-field-goal-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* ===== ZONE INDICATOR ===== */
+.zone-indicator {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #7a808d;
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.zone-indicator.has-selection {
+    color: var(--primary-color);
+    background: rgba(0, 210, 106, 0.1);
+}
+
+.keeper-theme + .zone-indicator.has-selection {
+    color: #4db8ff;
+    background: rgba(0, 149, 255, 0.1);
+}
+
+/* ===== INPUT STYLES (moved from inline) ===== */
+input[type="number"] {
+    appearance: none;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input[type="number"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 210, 106, 0.2);
+}
+
+/* ===== KEEPER/KICKER SELECT SYNC ===== */
+.form-stepper .step.completed .step-num {
+    background: var(--primary-color);
+    color: #0a0e17;
+}
+
+/* ===== RESULT ANIMATION ADJUSTMENTS ===== */
+@keyframes fadeIndUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.result-panel .stat-box {
+    animation: fadeIndUp 0.4s ease-out both;
+}
+
+.result-panel .stat-box:nth-child(1) { animation-delay: 0.1s; }
+.result-panel .stat-box:nth-child(2) { animation-delay: 0.2s; }
+.result-panel .stat-box:nth-child(3) { animation-delay: 0.3s; }
