@@ -16,7 +16,7 @@
     <div class="container">
         <header>
             <div class="logo">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
                     <path d="M2 12h20"></path>
@@ -30,195 +30,221 @@
             <div class="glass-card prediction-form">
                 <h2>Configurar Situación Hipotética</h2>
 
-                <div class="form-stepper">
-                    <div class="step active">
+                <div class="form-stepper" id="formStepper">
+                    <div class="step active" data-step="1">
                         <span class="step-num">1</span>
+                        <span class="step-label">Disparo</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <span class="step-num">2</span>
                         <span class="step-label">Arquero</span>
                     </div>
                     <div class="step-line"></div>
-                    <div class="step active">
-                        <span class="step-num">2</span>
-                        <span class="step-label">Pateador</span>
-                    </div>
-                    <div class="step-line"></div>
-                    <div class="step active">
+                    <div class="step" data-step="3">
                         <span class="step-num">3</span>
                         <span class="step-label">Contexto</span>
                     </div>
                 </div>
 
                 <form id="penaltyForm">
-                    <div class="form-grid">
+                    <div class="step-body">
 
-                        <!-- ===== PASO 1: ARQUERO ===== -->
-                        <div class="input-group" style="grid-column: 1 / -1;">
-                            <div class="section-label">
-                                <span class="section-badge keeper-badge">Arquero</span>
-                                <h3>¿Hacia dónde se lanza?</h3>
-                            </div>
-                            <p class="section-desc">Haz clic en la zona de la portería hacia donde crees que se lanzará el portero</p>
-                            <div class="pitch-container keeper-theme">
-                                <div class="goal-net" id="goalNetKeeper">
-                                    <div class="goal-zone" data-zone="1">1</div>
-                                    <div class="goal-zone" data-zone="2">2</div>
-                                    <div class="goal-zone" data-zone="3">3</div>
-                                    <div class="goal-zone" data-zone="4">4</div>
-                                    <div class="goal-zone" data-zone="5">5</div>
-                                    <div class="goal-zone" data-zone="6">6</div>
-                                    <div class="goal-zone" data-zone="7">7</div>
-                                    <div class="goal-zone" data-zone="8">8</div>
-                                    <div class="goal-zone" data-zone="9">9</div>
+                        <!-- ===== STEP 1: DISPARO ===== -->
+                        <div class="step-content active" data-step="1">
+                            <div class="input-group text-center">
+                                <div class="section-label">
+                                    <span class="section-badge kicker-badge">Cobrador</span>
+                                    <h3>¿Hacia d&oacute;nde dispara?</h3>
                                 </div>
-                                <div class="keeper-field">
-                                    <div class="keeper-field-inner">
-                                        <div class="keeper-field-pen-area">
-                                            <div class="keeper-field-spot"></div>
-                                            <div class="keeper-field-kicker">P</div>
-                                        </div>
-                                        <div class="keeper-field-goal-line"></div>
+                                <p class="section-desc">Haz clic en la zona de la porter&iacute;a hacia donde ir&aacute; dirigido el penal</p>
+                                <div class="pitch-container kicker-theme">
+                                    <div class="goal-net" id="goalNetKicker">
+                                        <div class="goal-zone" data-zone="1">1</div>
+                                        <div class="goal-zone" data-zone="2">2</div>
+                                        <div class="goal-zone" data-zone="3">3</div>
+                                        <div class="goal-zone" data-zone="4">4</div>
+                                        <div class="goal-zone" data-zone="5">5</div>
+                                        <div class="goal-zone" data-zone="6">6</div>
+                                        <div class="goal-zone" data-zone="7">7</div>
+                                        <div class="goal-zone" data-zone="8">8</div>
+                                        <div class="goal-zone" data-zone="9">9</div>
+                                    </div>
+                                    <div class="penalty-box">
+                                        <div class="penalty-spot"></div>
+                                        <div class="penalty-arc"></div>
                                     </div>
                                 </div>
+                                <div id="kickerZoneIndicator" class="zone-indicator">Selecciona una zona</div>
+                                <div id="zoneError" class="error-msg hidden">Selecciona hacia d&oacute;nde va el disparo</div>
+                                <input type="hidden" id="zone" name="zone">
                             </div>
-                            <div id="keeperZoneIndicator" class="zone-indicator">Selecciona una zona</div>
-                            <div id="keeperError" class="error-msg hidden">Selecciona hacia d&oacute;nde se lanza el arquero</div>
-                            <input type="hidden" id="zone_keeper" name="zone_keeper">
                         </div>
 
-                        <!-- ===== PASO 2: PATEADOR ===== -->
-                        <div class="input-group" style="grid-column: 1 / -1;">
-                            <div class="section-label">
-                                <span class="section-badge kicker-badge">Cobrador</span>
-                                <h3>¿Hacia d&oacute;nde dispara?</h3>
-                            </div>
-                            <p class="section-desc">Haz clic en la zona de la porter&iacute;a hacia donde ir&aacute; dirigido el penal</p>
-                            <div class="pitch-container kicker-theme">
-                                <div class="goal-net" id="goalNetKicker">
-                                    <div class="goal-zone" data-zone="1">1</div>
-                                    <div class="goal-zone" data-zone="2">2</div>
-                                    <div class="goal-zone" data-zone="3">3</div>
-                                    <div class="goal-zone" data-zone="4">4</div>
-                                    <div class="goal-zone" data-zone="5">5</div>
-                                    <div class="goal-zone" data-zone="6">6</div>
-                                    <div class="goal-zone" data-zone="7">7</div>
-                                    <div class="goal-zone" data-zone="8">8</div>
-                                    <div class="goal-zone" data-zone="9">9</div>
+                        <!-- ===== STEP 2: ARQUERO ===== -->
+                        <div class="step-content" data-step="2">
+                            <div class="input-group text-center">
+                                <div class="section-label">
+                                    <span class="section-badge keeper-badge">Arquero</span>
+                                    <h3>¿Hacia d&oacute;nde se lanza?</h3>
                                 </div>
-                                <div class="penalty-box">
-                                    <div class="penalty-spot"></div>
-                                    <div class="penalty-arc"></div>
+                                <p class="section-desc">Elige la zona hacia la que se lanza: <strong>1-4-7 = izquierda &middot; 2-5-8 = centro &middot; 3-6-9 = derecha</strong></p>
+                                <div class="pitch-container keeper-theme">
+                                    <div class="goal-net" id="goalNetKeeper">
+                                        <div class="goal-zone" data-zone="1">1</div>
+                                        <div class="goal-zone" data-zone="2">2</div>
+                                        <div class="goal-zone" data-zone="3">3</div>
+                                        <div class="goal-zone" data-zone="4">4</div>
+                                        <div class="goal-zone" data-zone="5">5</div>
+                                        <div class="goal-zone" data-zone="6">6</div>
+                                        <div class="goal-zone" data-zone="7">7</div>
+                                        <div class="goal-zone" data-zone="8">8</div>
+                                        <div class="goal-zone" data-zone="9">9</div>
+                                    </div>
+                                    <div class="keeper-field">
+                                        <div class="keeper-field-inner">
+                                            <div class="keeper-field-pen-area">
+                                                <div class="keeper-field-spot"></div>
+                                                <div class="keeper-field-kicker">P</div>
+                                            </div>
+                                            <div class="keeper-field-goal-line"></div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div id="keeperZoneIndicator" class="zone-indicator">Selecciona una zona</div>
+                                <div id="keeperError" class="error-msg hidden">Selecciona hacia d&oacute;nde se lanza el arquero</div>
+                                <input type="hidden" id="zone_keeper" name="zone_keeper">
+                                <input type="hidden" id="keeper" name="keeper">
                             </div>
-                            <div id="kickerZoneIndicator" class="zone-indicator">Selecciona una zona</div>
-                            <div id="zoneError" class="error-msg hidden">Selecciona hacia d&oacute;nde va el disparo</div>
-                            <input type="hidden" id="zone" name="zone">
                         </div>
 
-                        <!-- ===== PASO 3: CONTEXTO ===== -->
-                        <div class="input-group">
-                            <label for="team">Equipo (Mundial 2026)</label>
-                            <select id="team" name="team" required>
-                                <option value="" disabled selected>Seleccione equipo</option>
-                                <optgroup label="Grupo A">
-                                    <option value="MEX">MEX (M&eacute;xico)</option>
-                                    <option value="RSA">RSA (Sud&aacute;frica)</option>
-                                    <option value="KOR">KOR (Corea del Sur)</option>
-                                    <option value="CZE">CZE (Rep&uacute;blica Checa)</option>
-                                </optgroup>
-                                <optgroup label="Grupo B">
-                                    <option value="CAN">CAN (Canad&aacute;)</option>
-                                    <option value="BIH">BIH (Bosnia y Herzegovina)</option>
-                                    <option value="QAT">QAT (Catar)</option>
-                                    <option value="SUI">SUI (Suiza)</option>
-                                </optgroup>
-                                <optgroup label="Grupo C">
-                                    <option value="BRA">BRA (Brasil)</option>
-                                    <option value="MAR">MAR (Marruecos)</option>
-                                    <option value="HAI">HAI (Hait&iacute;)</option>
-                                    <option value="SCO">SCO (Escocia)</option>
-                                </optgroup>
-                                <optgroup label="Grupo D">
-                                    <option value="USA">USA (Estados Unidos)</option>
-                                    <option value="PAR">PAR (Paraguay)</option>
-                                    <option value="AUS">AUS (Australia)</option>
-                                    <option value="TUR">TUR (Turqu&iacute;a)</option>
-                                </optgroup>
-                                <optgroup label="Grupo E">
-                                    <option value="GER">GER (Alemania)</option>
-                                    <option value="CUW">CUW (Curazao)</option>
-                                    <option value="CIV">CIV (Costa de Marfil)</option>
-                                    <option value="ECU">ECU (Ecuador)</option>
-                                </optgroup>
-                                <optgroup label="Grupo F">
-                                    <option value="NED">NED (Pa&iacute;ses Bajos)</option>
-                                    <option value="JPN">JPN (Jap&oacute;n)</option>
-                                    <option value="TUN">TUN (T&uacute;nez)</option>
-                                    <option value="SWE">SWE (Suecia)</option>
-                                </optgroup>
-                                <optgroup label="Grupo G">
-                                    <option value="BEL">BEL (B&eacute;lgica)</option>
-                                    <option value="EGY">EGY (Egipto)</option>
-                                    <option value="IRN">IRN (Ir&aacute;n)</option>
-                                    <option value="NZL">NZL (Nueva Zelanda)</option>
-                                </optgroup>
-                                <optgroup label="Grupo H">
-                                    <option value="ESP">ESP (Espa&ntilde;a)</option>
-                                    <option value="CPV">CPV (Cabo Verde)</option>
-                                    <option value="KSA">KSA (Arabia Saudita)</option>
-                                    <option value="URU">URU (Uruguay)</option>
-                                </optgroup>
-                                <optgroup label="Grupo I">
-                                    <option value="FRA">FRA (Francia)</option>
-                                    <option value="SEN">SEN (Senegal)</option>
-                                    <option value="NOR">NOR (Noruega)</option>
-                                    <option value="IRQ">IRQ (Irak)</option>
-                                </optgroup>
-                                <optgroup label="Grupo J">
-                                    <option value="ARG">ARG (Argentina)</option>
-                                    <option value="ALG">ALG (Argelia)</option>
-                                    <option value="AUT">AUT (Austria)</option>
-                                    <option value="JOR">JOR (Jordania)</option>
-                                </optgroup>
-                                <optgroup label="Grupo K">
-                                    <option value="POR">POR (Portugal)</option>
-                                    <option value="COD">COD (R.D. del Congo)</option>
-                                    <option value="UZB">UZB (Uzbekist&aacute;n)</option>
-                                    <option value="COL">COL (Colombia)</option>
-                                </optgroup>
-                                <optgroup label="Grupo L">
-                                    <option value="ENG">ENG (Inglaterra)</option>
-                                    <option value="CRO">CRO (Croacia)</option>
-                                    <option value="PAN">PAN (Panam&aacute;)</option>
-                                </optgroup>
-                            </select>
+                        <!-- ===== STEP 3: CONTEXTO ===== -->
+                        <div class="step-content" data-step="3">
+                            <div class="section-label" style="margin-bottom: 1rem;">
+                                <span class="section-badge" style="background:rgba(255,255,255,0.1);color:#a0a5b0;border-color:rgba(255,255,255,0.2);">Contexto</span>
+                                <h3>Informaci&oacute;n del partido</h3>
+                            </div>
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label for="team">Equipo (Mundial 2026)</label>
+                                    <select id="team" name="team" required>
+                                        <option value="" disabled selected>Seleccione equipo</option>
+                                        <optgroup label="Grupo A">
+                                            <option value="MEX">MEX (M&eacute;xico)</option>
+                                            <option value="RSA">RSA (Sud&aacute;frica)</option>
+                                            <option value="KOR">KOR (Corea del Sur)</option>
+                                            <option value="CZE">CZE (Rep&uacute;blica Checa)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo B">
+                                            <option value="CAN">CAN (Canad&aacute;)</option>
+                                            <option value="BIH">BIH (Bosnia y Herzegovina)</option>
+                                            <option value="QAT">QAT (Catar)</option>
+                                            <option value="SUI">SUI (Suiza)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo C">
+                                            <option value="BRA">BRA (Brasil)</option>
+                                            <option value="MAR">MAR (Marruecos)</option>
+                                            <option value="HAI">HAI (Hait&iacute;)</option>
+                                            <option value="SCO">SCO (Escocia)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo D">
+                                            <option value="USA">USA (Estados Unidos)</option>
+                                            <option value="PAR">PAR (Paraguay)</option>
+                                            <option value="AUS">AUS (Australia)</option>
+                                            <option value="TUR">TUR (Turqu&iacute;a)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo E">
+                                            <option value="GER">GER (Alemania)</option>
+                                            <option value="CUW">CUW (Curazao)</option>
+                                            <option value="CIV">CIV (Costa de Marfil)</option>
+                                            <option value="ECU">ECU (Ecuador)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo F">
+                                            <option value="NED">NED (Pa&iacute;ses Bajos)</option>
+                                            <option value="JPN">JPN (Jap&oacute;n)</option>
+                                            <option value="TUN">TUN (T&uacute;nez)</option>
+                                            <option value="SWE">SWE (Suecia)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo G">
+                                            <option value="BEL">BEL (B&eacute;lgica)</option>
+                                            <option value="EGY">EGY (Egipto)</option>
+                                            <option value="IRN">IRN (Ir&aacute;n)</option>
+                                            <option value="NZL">NZL (Nueva Zelanda)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo H">
+                                            <option value="ESP">ESP (Espa&ntilde;a)</option>
+                                            <option value="CPV">CPV (Cabo Verde)</option>
+                                            <option value="KSA">KSA (Arabia Saudita)</option>
+                                            <option value="URU">URU (Uruguay)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo I">
+                                            <option value="FRA">FRA (Francia)</option>
+                                            <option value="SEN">SEN (Senegal)</option>
+                                            <option value="NOR">NOR (Noruega)</option>
+                                            <option value="IRQ">IRQ (Irak)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo J">
+                                            <option value="ARG">ARG (Argentina)</option>
+                                            <option value="ALG">ALG (Argelia)</option>
+                                            <option value="AUT">AUT (Austria)</option>
+                                            <option value="JOR">JOR (Jordania)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo K">
+                                            <option value="POR">POR (Portugal)</option>
+                                            <option value="COD">COD (R.D. del Congo)</option>
+                                            <option value="UZB">UZB (Uzbekist&aacute;n)</option>
+                                            <option value="COL">COL (Colombia)</option>
+                                        </optgroup>
+                                        <optgroup label="Grupo L">
+                                            <option value="ENG">ENG (Inglaterra)</option>
+                                            <option value="CRO">CRO (Croacia)</option>
+                                            <option value="PAN">PAN (Panam&aacute;)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="foot">Pie del Cobrador</label>
+                                    <select id="foot" name="foot" required>
+                                        <option value="" disabled selected>Seleccione pie</option>
+                                        <option value="R">Derecho (R)</option>
+                                        <option value="L">Izquierdo (L)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="penalty_number">Turno de Penal</label>
+                                    <input type="number" id="penalty_number" name="penalty_number" min="1" max="22" required value="1">
+                                </div>
+                                <div class="input-group">
+                                    <label for="match_pressure">Presi&oacute;n (Eliminatoria)</label>
+                                    <select id="match_pressure" name="match_pressure" required>
+                                        <option value="0">Fase de Grupos (Baja)</option>
+                                        <option value="1">Eliminatoria (Alta)</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group">
-                            <label for="foot">Pie del Cobrador</label>
-                            <select id="foot" name="foot" required>
-                                <option value="" disabled selected>Seleccione pie</option>
-                                <option value="R">Derecho (R)</option>
-                                <option value="L">Izquierdo (L)</option>
-                            </select>
-                        </div>
-                        <input type="hidden" id="keeper" name="keeper">
-                        <div class="input-group">
-                            <label for="penalty_number">Turno de Penal</label>
-                            <input type="number" id="penalty_number" name="penalty_number" min="1" max="22" required value="1">
-                        </div>
-                        <div class="input-group">
-                            <label for="match_pressure">Presi&oacute;n (Eliminatoria)</label>
-                            <select id="match_pressure" name="match_pressure" required>
-                                <option value="0">Fase de Grupos (Baja)</option>
-                                <option value="1">Eliminatoria (Alta)</option>
-                            </select>
-                        </div>
+
                     </div>
-                    <button type="submit" class="predict-btn">
-                        <span>Generar Predicci&oacute;n</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14"></path>
-                            <path d="M12 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
+
+                    <div class="step-nav">
+                        <button type="button" class="step-btn prev-btn hidden" id="prevStep">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+                            Anterior
+                        </button>
+                        <div class="step-dots">
+                            <span class="dot active" data-step="1"></span>
+                            <span class="dot" data-step="2"></span>
+                            <span class="dot" data-step="3"></span>
+                        </div>
+                        <button type="button" class="step-btn next-btn" id="nextStep">
+                            Siguiente
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                        <button type="submit" class="predict-btn hidden" id="submitBtn">
+                            <span>Generar Predicci&oacute;n</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
                 </form>
             </div>
 

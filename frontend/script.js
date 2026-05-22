@@ -24,8 +24,83 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ===== STEP NAVIGATION =====
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    const stepperSteps = document.querySelectorAll('#formStepper .step');
+    const stepContents = document.querySelectorAll('.step-content');
+    const prevBtn = document.getElementById('prevStep');
+    const nextBtn = document.getElementById('nextStep');
+    const submitBtn = document.getElementById('submitBtn');
+    const dots = document.querySelectorAll('.dot');
+
+    function goToStep(step) {
+        currentStep = step;
+
+        stepContents.forEach(el => el.classList.remove('active'));
+        document.querySelector(`.step-content[data-step="${step}"]`).classList.add('active');
+
+        stepperSteps.forEach(el => {
+            const s = parseInt(el.dataset.step);
+            el.classList.toggle('active', s === step);
+            el.classList.toggle('completed', s < step);
+        });
+
+        dots.forEach(el => {
+            el.classList.toggle('active', parseInt(el.dataset.step) === step);
+        });
+
+        prevBtn.classList.toggle('hidden', step === 1);
+        nextBtn.classList.toggle('hidden', step === totalSteps);
+        submitBtn.classList.toggle('hidden', step !== totalSteps);
+    }
+
+    function validateStep(step) {
+        if (step === 1) {
+            if (!document.getElementById('zone').value) {
+                document.getElementById('zoneError').classList.remove('hidden');
+                return false;
+            }
+            document.getElementById('zoneError').classList.add('hidden');
+        }
+        if (step === 2) {
+            if (!document.getElementById('zone_keeper').value) {
+                document.getElementById('keeperError').classList.remove('hidden');
+                return false;
+            }
+            document.getElementById('keeperError').classList.add('hidden');
+        }
+        return true;
+    }
+
+    stepperSteps.forEach(el => {
+        el.addEventListener('click', () => {
+            const target = parseInt(el.dataset.step);
+            if (target < currentStep) {
+                goToStep(target);
+            } else if (target > currentStep) {
+                for (let i = currentStep; i < target; i++) {
+                    if (!validateStep(i)) return;
+                }
+                goToStep(target);
+            }
+        });
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) goToStep(currentStep - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (!validateStep(currentStep)) return;
+        if (currentStep < totalSteps) goToStep(currentStep + 1);
+    });
+
     // ===== ZONE SELECTORS =====
     const KEEPER_MAP = { 1: 'L', 2: 'C', 3: 'R', 4: 'L', 5: 'C', 6: 'R', 7: 'L', 8: 'C', 9: 'R' };
+
+    const DIR_LABELS = { 'L': 'izquierda', 'C': 'centro', 'R': 'derecha' };
 
     function setupZoneSelector(netId, inputId, indicatorId, keeperMode) {
         const zones = document.querySelectorAll(`#${netId} .goal-zone`);
@@ -37,44 +112,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 zones.forEach(z => z.classList.remove('selected'));
                 zone.classList.add('selected');
                 input.value = zone.dataset.zone;
-                indicator.textContent = `Zona ${zone.dataset.zone} seleccionada`;
-                indicator.classList.add('has-selection');
 
                 if (keeperMode) {
-                    document.getElementById('keeper').value = KEEPER_MAP[zone.dataset.zone];
+                    const dir = KEEPER_MAP[zone.dataset.zone];
+                    document.getElementById('keeper').value = dir;
+                    indicator.textContent = `Zona ${zone.dataset.zone} — se lanza a la ${DIR_LABELS[dir]}`;
+                } else {
+                    indicator.textContent = `Zona ${zone.dataset.zone} seleccionada`;
                 }
 
+                indicator.classList.add('has-selection');
                 document.getElementById(keeperMode ? 'keeperError' : 'zoneError').classList.add('hidden');
             });
         });
     }
 
-    setupZoneSelector('goalNetKeeper', 'zone_keeper', 'keeperZoneIndicator', true);
     setupZoneSelector('goalNetKicker', 'zone', 'kickerZoneIndicator', false);
+    setupZoneSelector('goalNetKeeper', 'zone_keeper', 'keeperZoneIndicator', true);
 
     // ===== FORM SUBMIT =====
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const keeperZone = document.getElementById('zone_keeper').value;
-        const kickerZone = document.getElementById('zone').value;
-        let hasError = false;
-
-        if (!keeperZone) {
-            document.getElementById('keeperError').classList.remove('hidden');
-            hasError = true;
-        } else {
-            document.getElementById('keeperError').classList.add('hidden');
-        }
-
-        if (!kickerZone) {
-            document.getElementById('zoneError').classList.remove('hidden');
-            hasError = true;
-        } else {
-            document.getElementById('zoneError').classList.add('hidden');
-        }
-
-        if (hasError) return;
+        if (!validateStep(1) || !validateStep(2)) return;
 
         resultPanel.classList.remove('hidden');
         loadingState.classList.remove('hidden');
@@ -83,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(form);
         const payload = {
             team: formData.get('team'),
-            zone: parseInt(kickerZone),
+            zone: parseInt(document.getElementById('zone').value),
             foot: formData.get('foot'),
             keeper: formData.get('keeper'),
             penalty_number: parseInt(formData.get('penalty_number')),
@@ -93,9 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('http://127.0.0.1:8000/predict', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
 
@@ -118,6 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
             el.textContent = 'Selecciona una zona';
             el.classList.remove('has-selection');
         });
+        document.getElementById('keeper').value = '';
+        goToStep(1);
     });
 
     function displayPrediction(data) {
