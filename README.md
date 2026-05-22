@@ -11,8 +11,9 @@ A modern, interactive, and complete Machine Learning pipeline for predicting soc
 
 ## Project Information
 
-**Course:** 8108277 ELECTIVA II - MACHINE LEARNING APLICADO  
-**Credits:** 3 (1 - 0)  
+**Course:** ELECTIVA II - MACHINE LEARNING APLICADO (8108277)
+**Group** (1 - 0)  
+**Credits:** 3
 **Professor:** VIVIANA ALEXANDRA VILLANUEVA CIPAGAUTA  
 
 ### Team Members
@@ -49,7 +50,7 @@ A modern, interactive, and complete Machine Learning pipeline for predicting soc
    # On Windows:
    venv\Scripts\activate
    # On macOS/Linux:
-   # source venv/bin/activate
+   source venv/bin/activate
    ```
 
 2. **Install required dependencies:**
@@ -71,51 +72,53 @@ A modern, interactive, and complete Machine Learning pipeline for predicting soc
 
 ## Project Structure
 
-```
-C:.
-|   .gitignore
-|   project.md
-|   README.md
-|   requirements.txt
-|
-+---api
-|       main.py
-|       schemas.py
-|       __init__.py
-|
-+---data
-|       WorldCupShootouts.csv
-|
-+---frontend
-|       bg.png
-|       index.html
-|       script.js
-|       styles.css
-|
-+---models
-|       classifier_model.pkl
-|       kmeans_model.pkl
-|       preprocessor.pkl
-|
-+---outputs
-|   \---evaluation_plots
-|           confusion_matrix.png
-|           elbow_method.png
-+---pipelines
-|       phase_1_eda.py
-|       phase_2_preprocessing.py
-|       phase_3_clustering.py
-|       phase_4_training.py
-|       phase_5_evaluation.py
-|
-\---src
-        classifier.py
-        clustering.py
-        data_loader.py
-        evaluator.py
-        predictor.py
-        preprocessor.py
-        __init__.py
+```text
+clustered-penalty-predictor/
+│
+├── data/                          ← Dataset original
+│   └── WorldCupShootouts.csv      
+│
+├── src/                           ← Módulos genéricos del sistema
+│   ├── data_loader.py             ← Carga y validación inicial
+│   ├── preprocessor.py            ← Limpieza y Feature Engineering
+│   ├── clustering.py              ← Modelado No Supervisado
+│   ├── classifier.py              ← Modelado Supervisado
+│   ├── predictor.py               ← Interfaz de inferencia final
+│   ├── evaluator.py               ← Generación de métricas
+│   └── __init__.py
+│
+├── pipelines/                     ← Scripts ejecutables por fase
+│   ├── phase_1_eda.py             ← FASE 1: EDA
+│   ├── phase_2_preprocessing.py   ← FASE 2: Preprocesamiento
+│   ├── phase_3_clustering.py      ← FASE 3: Clustering (K-Means)
+│   ├── phase_4_training.py        ← FASE 4: Random Forest
+│   └── phase_5_evaluation.py      ← FASE 5: Evaluación
+│
+├── frontend/                      ← Aplicación Web (UI interactiva)
+│   ├── index.html                 
+│   ├── script.js                  
+│   ├── styles.css                 
+│   └── bg.png                     
+│
+├── models/                        ← Modelos serializados
+│   ├── classifier_model.pkl       ← Random Forest .pkl
+│   ├── kmeans_model.pkl           ← K-Means .pkl
+│   └── preprocessor.pkl           ← Preprocesador general .pkl
+│
+├── api/                           ← FastAPI REST service
+│   ├── main.py                    ← Endpoints del API REST
+│   ├── schemas.py                 ← Esquemas Pydantic
+│   └── __init__.py
+│
+├── outputs/                       
+│   └── evaluation_plots/          
+│       ├── confusion_matrix.png   
+│       └── elbow_method.png       
+│
+├── requirements.txt               ← Dependencias
+├── project.md                     
+├── .gitignore                     
+└── README.md                      
 ```
 
 > [!NOTE]
