@@ -7,8 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configurar rutas de imágenes dinámicamente
     const confMatrixImg = document.getElementById('confMatrixImg');
     const elbowImg = document.getElementById('elbowImg');
+    const featureImportanceImg = document.getElementById('featureImportanceImg');
+    const perClassMetricsImg = document.getElementById('perClassMetricsImg');
     if (confMatrixImg) confMatrixImg.src = `${API_URL}/plots/confusion_matrix.png`;
     if (elbowImg) elbowImg.src = `${API_URL}/plots/elbow_method.png`;
+    if (featureImportanceImg) featureImportanceImg.src = `${API_URL}/plots/feature_importance.png`;
+    if (perClassMetricsImg) perClassMetricsImg.src = `${API_URL}/plots/per_class_metrics.png`;
 
     const form = document.getElementById('penaltyForm');
     const resultPanel = document.getElementById('resultPanel');

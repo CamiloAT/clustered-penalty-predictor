@@ -1,4 +1,4 @@
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, silhouette_score
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, silhouette_score, precision_score, recall_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -44,3 +44,40 @@ def evaluate_classifier(y_true, y_pred, output_dir="."):
     plt.close()
     
     return {"accuracy": acc, "f1_score": f1}
+
+def plot_feature_importance(model, feature_names, output_dir="."):
+    importances = model.feature_importances_
+    indices = np.argsort(importances)[::-1]
+
+    plt.figure(figsize=(9, 5))
+    colors = plt.cm.Greens(np.linspace(0.3, 0.9, len(indices)))
+    plt.barh(range(len(indices)), importances[indices][::-1], color=colors[::-1])
+    plt.yticks(range(len(indices)), [feature_names[i] for i in indices][::-1])
+    plt.xlabel('Importancia Relativa')
+    plt.title('Importancia de Características - Random Forest')
+    plt.tight_layout()
+    plt.savefig(f"{output_dir}/feature_importance.png")
+    plt.close()
+
+def plot_per_class_metrics(y_true, y_pred, output_dir="."):
+    labels = [0, 1, 2]
+    class_names = ['Gol', 'Atajada', 'Fallo']
+    precision = precision_score(y_true, y_pred, labels=labels, average=None)
+    recall = recall_score(y_true, y_pred, labels=labels, average=None)
+    f1 = f1_score(y_true, y_pred, labels=labels, average=None)
+
+    x = np.arange(len(class_names))
+    width = 0.25
+
+    plt.figure(figsize=(8, 5))
+    plt.bar(x - width, precision, width, label='Precisión', color='#00d26a', alpha=0.8)
+    plt.bar(x, recall, width, label='Recall', color='#ffaa00', alpha=0.8)
+    plt.bar(x + width, f1, width, label='F1-Score', color='#4db8ff', alpha=0.8)
+    plt.xticks(x, class_names)
+    plt.ylabel('Puntaje')
+    plt.title('Métricas por Clase')
+    plt.legend()
+    plt.grid(axis='y', alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(f"{output_dir}/per_class_metrics.png")
+    plt.close()

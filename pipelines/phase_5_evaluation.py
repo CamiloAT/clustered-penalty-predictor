@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.data_loader import load_data
 from src.preprocessor import PenaltyPreprocessor, split_data
-from src.evaluator import evaluate_classifier, evaluate_clustering
+from src.evaluator import evaluate_classifier, evaluate_clustering, plot_feature_importance, plot_per_class_metrics
 from src.clustering import PenaltyClustering
 from src.classifier import PenaltyClassifier
 
@@ -48,6 +48,15 @@ def run_evaluation():
     train_labels = clustering.predict(X_train)
     clust_metrics = evaluate_clustering(X_train, train_labels, output_dir=plots_dir)
     print(f"Silhouette Score: {clust_metrics['silhouette_score']:.4f}")
+
+    # 6. Importancia de características
+    print("Generando gráfica de importancia de características...")
+    feature_names = X_test_clustered.columns.tolist()
+    plot_feature_importance(classifier.model, feature_names, output_dir=plots_dir)
+
+    # 7. Métricas por clase
+    print("Generando métricas por clase...")
+    plot_per_class_metrics(y_test, y_pred, output_dir=plots_dir)
 
     print(f"Reportes y gráficas exportados a {plots_dir}")
 
