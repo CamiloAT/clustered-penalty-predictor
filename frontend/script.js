@@ -16,7 +16,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const predictionContent = document.getElementById('predictionContent');
     const resetBtn = document.getElementById('resetBtn');
 
-    // Modal Logic
+    // Cluster definitions
+    const CLUSTER_INFO = [
+        {
+            name: "Tirador Frío y Calculador",
+            desc: "Pocos pasos de carrera, tiempo moderado y alta efectividad del equipo. Penales en contextos de baja presión. Perfil confiado que apuesta por la precisión y la técnica.",
+            badge: "Alta Efectividad",
+            badgeClass: "goal-high"
+        },
+        {
+            name: "Tirador de Potencia",
+            desc: "Muchos pasos de carrera y ejecución rápida. Efectividad media del equipo con estrés moderado. Perfil explosivo que confía en su potencia para vencer al arquero.",
+            badge: "Potencia",
+            badgeClass: "goal-mid"
+        },
+        {
+            name: "Tirador Bajo Presión",
+            desc: "Pasos variables y tiempo de ejecución más largo. Alta presión contextual (eliminatorias, penales tardíos) que genera un alto índice de estrés. Perfil que duda y se toma su tiempo.",
+            badge: "Alta Presión",
+            badgeClass: "goal-low"
+        },
+        {
+            name: "Tirador Inexperto",
+            desc: "Pocos pasos y ejecución precipitada. Baja efectividad histórica del equipo. Perfil novato que tiende a apresurarse en la ejecución del penal.",
+            badge: "Baja Efectividad",
+            badgeClass: "goal-mid"
+        }
+    ];
+
+    // Cluster Modal Logic
+    const clusterModal = document.getElementById('clusterModal');
+    const clusterInfoBtn = document.getElementById('clusterInfoBtn');
+    const closeClusterBtn = document.getElementById('closeClusterBtn');
+    const clusterCards = document.getElementById('clusterCards');
+
+    function renderClusterCards(activeCluster) {
+        clusterCards.innerHTML = CLUSTER_INFO.map((c, i) => `
+            <div class="cluster-card ${i === activeCluster ? 'active' : ''}">
+                <div class="cluster-number">Clúster ${i}</div>
+                <h4>${c.name}</h4>
+                <p>${c.desc}</p>
+                <span class="cluster-badge ${c.badgeClass}">${c.badge}</span>
+            </div>
+        `).join('');
+    }
+
+    if (clusterInfoBtn && clusterModal && closeClusterBtn) {
+        clusterInfoBtn.addEventListener('click', () => {
+            const clusterText = document.getElementById('clusterText');
+            const currentCluster = parseInt(clusterText.textContent.replace('Clúster ', ''));
+            renderClusterCards(isNaN(currentCluster) ? 0 : currentCluster);
+            clusterModal.classList.remove('hidden');
+        });
+        closeClusterBtn.addEventListener('click', () => {
+            clusterModal.classList.add('hidden');
+        });
+        clusterModal.addEventListener('click', (e) => {
+            if (e.target === clusterModal) {
+                clusterModal.classList.add('hidden');
+            }
+        });
+    }
+
+    // Metrics Modal Logic
     const metricsModal = document.getElementById('metricsModal');
     const showMetricsBtn = document.getElementById('showMetricsBtn');
     const closeMetricsBtn = document.getElementById('closeMetricsBtn');

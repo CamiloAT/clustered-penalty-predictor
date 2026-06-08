@@ -272,7 +272,10 @@
                         </div>
                         <div class="stat-box">
                             <span class="stat-label">Clúster Asignado</span>
-                            <span class="stat-value" id="clusterText">2</span>
+                            <div class="stat-value-row">
+                                <span class="stat-value" id="clusterText">2</span>
+                                <button class="info-btn" id="clusterInfoBtn" title="Ver descripción de clústers">ⓘ</button>
+                            </div>
                         </div>
                         <div class="stat-box">
                             <span class="stat-label">Perfil</span>
@@ -312,6 +315,18 @@
                 <img id="confMatrixImg" alt="Matriz de Confusión" onerror="this.style.display='none'">
                 <img id="elbowImg" alt="Método del Codo" onerror="this.style.display='none'">
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de Información de Clústers -->
+    <div id="clusterModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="close-modal" id="closeClusterBtn">&times;</button>
+            <h3>Perfiles de Clúster</h3>
+            <p style="color: #a0a5b0; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                El modelo agrupa los penales en 4 perfiles según características del cobrador, contexto del partido y datos aumentados (pasos de carrera, tiempo, efectividad del equipo, índice de estrés).
+            </p>
+            <div id="clusterCards" class="cluster-cards"></div>
         </div>
     </div>
 
