@@ -225,9 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isGoal) {
                 animContent.classList.add('anim-goal');
                 animText.textContent = '¡GOLAZO!';
+            } else if (data.predicted_outcome === 'Atajada') {
+                animContent.classList.add('anim-save');
+                animText.textContent = '¡ATAJADA!';
             } else {
                 animContent.classList.add('anim-miss');
-                animText.textContent = data.predicted_outcome === 'Atajada' ? '¡ATAJADA!' : '¡FALLÓ!';
+                animText.textContent = '¡FALLÓ!';
             }
 
             setTimeout(() => {
