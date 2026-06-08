@@ -1,9 +1,9 @@
 import os
 import sys
-import joblib
-import pandas as pd
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from src.data_loader import load_data
+from src.preprocessor import PenaltyPreprocessor, split_data
 from src.evaluator import evaluate_classifier, evaluate_clustering
 from src.clustering import PenaltyClustering
 from src.classifier import PenaltyClassifier
@@ -23,11 +23,15 @@ def run_evaluation():
     clustering = PenaltyClustering()
     clustering.load_model(os.path.join(models_dir, 'kmeans_model.pkl'))
 
-    # 2. Cargar datos de test
-    processed_dir = os.path.join(base_dir, 'outputs', 'processed')
-    X_test = pd.read_pickle(os.path.join(processed_dir, 'X_test.pkl'))
-    y_test = pd.read_pickle(os.path.join(processed_dir, 'y_test.pkl'))
-    X_train = pd.read_pickle(os.path.join(processed_dir, 'X_train.pkl'))
+    # 2. Cargar y preprocesar datos para test
+    print("Cargando y preprocesando datos...")
+    df = load_data(os.path.join(base_dir, 'data', 'WorldCupShootouts.csv'))
+    df['Keeper'] = df['Keeper'].astype(str).str.upper()
+    df['Foot'] = df['Foot'].astype(str).str.upper()
+
+    preprocessor = PenaltyPreprocessor()
+    X, y = preprocessor.fit_transform(df)
+    (X_train, y_train), (X_val, y_val), (X_test, y_test) = split_data(X, y)
 
     # 3. Inyectar cluster en test
     X_test_clustered = X_test.copy()

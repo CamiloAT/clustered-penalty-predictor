@@ -1,8 +1,9 @@
 import os
 import sys
-import pandas as pd
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from src.data_loader import load_data
+from src.preprocessor import PenaltyPreprocessor, split_data
 from src.clustering import PenaltyClustering
 from src.evaluator import evaluate_clustering
 
@@ -10,9 +11,15 @@ def run_clustering():
     print("Ejecutando pipeline de clustering K-Means...")
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    # 1. Cargar datos preprocesados
-    processed_dir = os.path.join(base_dir, 'outputs', 'processed')
-    X_train = pd.read_pickle(os.path.join(processed_dir, 'X_train.pkl'))
+    # 1. Cargar y preprocesar datos
+    print("Cargando y preprocesando datos...")
+    df = load_data(os.path.join(base_dir, 'data', 'WorldCupShootouts.csv'))
+    df['Keeper'] = df['Keeper'].astype(str).str.upper()
+    df['Foot'] = df['Foot'].astype(str).str.upper()
+
+    preprocessor = PenaltyPreprocessor()
+    X, y = preprocessor.fit_transform(df)
+    (X_train, y_train), (X_val, y_val), (X_test, y_test) = split_data(X, y)
 
     # 2. Entrenar clustering
     print("Entrenando K-Means con 4 clusters...")
