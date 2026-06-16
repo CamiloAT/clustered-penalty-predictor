@@ -151,6 +151,6 @@ clustered-penalty-predictor/
 | Name | GitHub |
 |---|---|
 | **Camilo Andres Arias Tenjo** | [@CamiloAT](https://github.com/CamiloAT) |
-| **Diego Fernando Aguirre Tenjo** | — |
+| **Diego Fernando Aguirre Tenjo** | [@elcokiin](https://github.com/elcokiin) |
 
-*Applied Machine Learning — Universidad Pedagógica y Tecnológica de Colombia (UPTC)*
+*Applied Machine Learning*
